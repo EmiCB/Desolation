@@ -1,0 +1,14 @@
+package com.emicb.desolation;
+
+public class Screen 
+{
+//******************** Sets Variables ********************
+	private int width, height;
+	public int [] pixels;
+	
+	public Screen(int width, int height)
+	{
+		this.width = width;
+		this.height = height;
+	}
+}

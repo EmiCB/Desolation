@@ -1,16 +1,26 @@
 package com.emicb.desolation;
 
-// imports things
-import javax.swing.JFrame;
+// TIP: Ctrl + Shift + O imports
+//******************** Imports Things ********************
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
+import javax.swing.JFrame;
+
+import com.emicb.desolation.graphics.Screen;
+
+//******************** Code Start ********************
 public class Game extends Canvas implements Runnable
-{
+{	
+//******************** Sets Variables ********************
 	// default Canvas serial
 	private static final long serialVersionUID = 1L;
 	
-//******************** Sets Variables ********************
 	// Sets game screen resolution
 	public static int width = 300;
 	public static int height = width / 16 * 9; // Sets resolution to a 16 * 9 ratio
@@ -20,13 +30,21 @@ public class Game extends Canvas implements Runnable
 	private Thread thread; // Thread: process within a process
 	private JFrame frame; // something to do with graphics (fix comment later)
 	private boolean running = false; // indicates if program is running
+
+	private Screen screen;
 	
-	// constructor
+	// main image object, our view
+	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData(); //array of all pixels on screen, DataBufferInt: makes things integers, getRaster: gives rectangular array of pixels you can write to
+	
+//******************** Constructor ********************
 	public Game()
 	{
 		// window display
 		Dimension size = new Dimension(width * scale, height * scale);
 		setPreferredSize(size); // applies window size
+		
+		screen = new Screen(width, height);
 		
 		frame = new JFrame();
 	}
@@ -57,14 +75,55 @@ public class Game extends Canvas implements Runnable
 	// Run method (executed in game start)
 	public void run()
 	{
-		while (running == true);
+		System.out.println("Hello?"); // line to test run code
+		while (running)
 		{
 			System.out.println("Running..."); // line to test run code
+			
+			update(); // handles logic
+			render(); // displays images
 		}
 	}
 	
-	// entry of program (game beginning)
-	public static void main(String[] args)
+	//******************** Game Logic ********************
+	public void update()
+	{
+		
+	}
+	
+	//******************** Game Images ********************
+	public void render()
+	{
+		// buffer
+		BufferStrategy bs = getBufferStrategy();
+		if (bs == null)
+		{
+			createBufferStrategy(3); // stores 2 images in memory
+			return;
+		}
+		
+		screen.render();
+		
+		for (int i=0; i<pixels.length; i++)
+		{
+			pixels [i] = screen.pixels[i];
+		}
+		
+		Graphics g = bs.getDrawGraphics(); // links drawing graphics and the buffer
+		//******************** \/ Put All Graphics Below \/ ********************
+		
+		g.setColor(Color.BLACK); // sets color to black
+		g.fillRect(0, 0, getWidth(), getHeight()); // makes background set color
+		
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), null); // displays buffered image
+		
+		//******************** Stop ********************
+		g.dispose(); // disposes of current graphics
+		bs.show(); // shows buffer strategy
+	}
+	
+	//******************** Entry Of Game Program (game beginning) ********************
+	public static void main(String[] args) 
 	{
 		Game game = new Game();
 		game.frame.setResizable(false); // no resizing game window -> no graphical errors
