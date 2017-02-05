@@ -1,6 +1,6 @@
 package com.emicb.desolation;
 
-// TIP: Ctrl + Shift + O imports
+//TIP: Ctrl + Shift + O imports
 //******************** Imports Things ********************
 import java.awt.Canvas;
 import java.awt.Color;
@@ -13,10 +13,10 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
 import com.emicb.desolation.graphics.Screen;
+import com.emicb.desolation.input.Keyboard;
 
-//******************** Code Start ********************
-public class Game extends Canvas implements Runnable
-{	
+
+public class Game extends Canvas implements Runnable {	
 //******************** Sets Variables ********************
 	// default Canvas serial
 	private static final long serialVersionUID = 1L;
@@ -26,9 +26,12 @@ public class Game extends Canvas implements Runnable
 	public static int height = width / 16 * 9; // Sets resolution to a 16 * 9 ratio
 	public static int scale = 3; // How much game will be scaled up to
 	
+	public static String title = "Desolation";
+	
 	// Sets more variables
 	private Thread thread; // Thread: process within a process
 	private JFrame frame; // something to do with graphics (fix comment later)
+	private Keyboard key; // key inputs
 	private boolean running = false; // indicates if program is running
 
 	private Screen screen;
@@ -38,74 +41,106 @@ public class Game extends Canvas implements Runnable
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData(); //array of all pixels on screen, DataBufferInt: makes things integers, getRaster: gives rectangular array of pixels you can write to
 	
 //******************** Constructor ********************
-	public Game()
-	{
+	public Game() {
 		// window display
 		Dimension size = new Dimension(width * scale, height * scale);
 		setPreferredSize(size); // applies window size
 		
 		screen = new Screen(width, height);
-		
 		frame = new JFrame();
+		key = new Keyboard();
+		
+		addKeyListener(key);
 	}
 	
 //******************** Game Start ********************
-	public synchronized void start() // Synchronized: ensures there are no overlaps in instructions
-	{
+	public synchronized void start() { // Synchronized: ensures there are no overlaps in instructions
 		running = true;
 		thread = new Thread(this, "Display");
 		thread.start();
 	}
 
 //******************** Game Stop ********************
-	public synchronized void stop ()
-	{
+	public synchronized void stop () {
 		running = false;
-		try
-		{
+		try {
 			thread.join();
-		}
-		catch (InterruptedException e)
-		{
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
 //******************** Game Loop ********************
 	// Run method (executed in game start)
-	public void run()
-	{
-		System.out.println("Hello?"); // line to test run code
-		while (running)
-		{
-			System.out.println("Running..."); // line to test run code
+	public void run() {
+		//******************** Sets More Variables ********************
+		long lastTime = System.nanoTime(); // time when game opens
+		long timer = System.currentTimeMillis();
+				
+		final double ns = 1000000000.0 / 60.0; 
+		double delta = 0;
+		
+		int frames = 0; // measures frames
+		int updates = 0; // measures how many times update(); is called every second
+		
+		while (running) {
+			//System.out.println("Running..."); // line to test run code
 			
-			update(); // handles logic
+			long now = System.nanoTime(); // time when game runs
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			
+			// timer for updates (controls update speed for all players)
+			while (delta >= 1) {
+				update(); // handles logic
+				updates++;
+				delta--;
+			}
+			
 			render(); // displays images
+			frames++;
+			
+			// FPS timer
+			if (System.currentTimeMillis() - timer > 1000) {
+				timer += 1000;
+				
+				System.out.println("UPS: " + updates + ", FPS: " + frames);
+				frame.setTitle(title + "  |  " + "UPS: " + updates + ", FPS: " + frames);
+				
+				updates = 0;
+				frames = 0;
+			}
 		}
+		stop();
 	}
 	
+	int x = 0, y = 0;
+	
 	//******************** Game Logic ********************
-	public void update()
-	{
+	public void update() {
+		// Key Inputs
+		key.update();
 		
+		// movement
+		if (key.up)	y--;
+		if (key.down) y++;
+		if (key.left) x--;
+		if (key.right) x++;
 	}
 	
 	//******************** Game Images ********************
-	public void render()
-	{
+	public void render() {
 		// buffer
 		BufferStrategy bs = getBufferStrategy();
-		if (bs == null)
-		{
+		if (bs == null) {
 			createBufferStrategy(3); // stores 2 images in memory
 			return;
 		}
 		
-		screen.render();
+		screen.clear();
+		screen.render(x, y);
 		
-		for (int i=0; i<pixels.length; i++)
-		{
+		for (int i=0; i<pixels.length; i++) {
 			pixels [i] = screen.pixels[i];
 		}
 		
@@ -123,11 +158,10 @@ public class Game extends Canvas implements Runnable
 	}
 	
 	//******************** Entry Of Game Program (game beginning) ********************
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		Game game = new Game();
 		game.frame.setResizable(false); // no resizing game window -> no graphical errors
-		game.frame.setTitle("Desolation"); // sets window title
+		game.frame.setTitle(Game.title); // sets window title
 		game.frame.add(game); // fills window with something
 		game.frame.pack(); // sets size
 		game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //terminate application when closed

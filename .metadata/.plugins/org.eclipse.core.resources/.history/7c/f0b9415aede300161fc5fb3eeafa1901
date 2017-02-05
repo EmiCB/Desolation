@@ -1,7 +1,0 @@
-package com.emicb.desolation;
-
-public class Screen 
-{
-	private int width, height;
-	public int [] pixels;
-}

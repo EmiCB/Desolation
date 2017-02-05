@@ -102,13 +102,22 @@ public class Game extends Canvas implements Runnable
 			return;
 		}
 		
+		screen.render();
+		
+		for (int i=0; i<pixels.length; i++)
+		{
+			pixels [i] = screen.pixels[i];
+		}
+		
 		Graphics g = bs.getDrawGraphics(); // links drawing graphics and the buffer
-		// put all graphics below
+		//******************** \/ Put All Graphics Below \/ ********************
 		
 		g.setColor(Color.BLACK); // sets color to black
 		g.fillRect(0, 0, getWidth(), getHeight()); // makes background set color
 		
-		// stop
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), null); // displays buffered image
+		
+		//******************** Stop ********************
 		g.dispose(); // disposes of current graphics
 		bs.show(); // shows buffer strategy
 	}
