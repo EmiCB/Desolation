@@ -53,7 +53,9 @@ public class Screen {
 	// Render individual tiles; can use sprites instead of tiles, but tiles make animations easier
 	public void renderTile(int xp, int yp, Tile tile) {
 		for (int y = 0; y < tile.sprite.SIZE; y++) {
-			int ya = y + yp; // Set absolute position y
+			for (int x = 0; x < tile.sprite.SIZE; x++) {
+				
+			}
 		}
 	}
 	
