@@ -3,7 +3,6 @@ package com.emicb.desolation;
 //TIP: Ctrl + Shift + O imports
 //******************** Imports Things ********************
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -22,7 +21,7 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// Sets game screen resolution
-	public static int width = 300;
+	public static int width = 400;
 	public static int height = width / 16 * 9; // Sets resolution to a 16 * 9 ratio
 	public static int scale = 3; // How much game will be scaled up to
 	
@@ -82,6 +81,8 @@ public class Game extends Canvas implements Runnable {
 		
 		int frames = 0; // measures frames
 		int updates = 0; // measures how many times update(); is called every second
+		
+		requestFocus(); // you don't have to click the game to focus actions
 		
 		while (running) {
 			//System.out.println("Running..."); // line to test run code
@@ -147,8 +148,8 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics(); // links drawing graphics and the buffer
 		//******************** \/ Put All Graphics Below \/ ********************
 		
-		g.setColor(Color.BLACK); // sets color to black
-		g.fillRect(0, 0, getWidth(), getHeight()); // makes background set color
+		//g.setColor(Color.BLACK); // sets color to black
+		//g.fillRect(0, 0, getWidth(), getHeight()); // makes background set color
 		
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null); // displays buffered image
 		
