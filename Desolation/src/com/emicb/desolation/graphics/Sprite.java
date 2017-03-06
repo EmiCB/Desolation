@@ -9,6 +9,7 @@ public class Sprite {
 	
 	// Set sprites
 	public static Sprite grass = new Sprite (32, 0, 0, SpriteSheet.tiles);
+	public static Sprite voidSprite = new Sprite(32, 0);
 	
 	// sets location of target sprite in sprite sheet
 	public Sprite(int size, int x, int y, SpriteSheet sheet) {
@@ -20,6 +21,19 @@ public class Sprite {
 		load();
 	}
 	
+	// void sprite constructor
+	public Sprite(int size, int color) {
+		SIZE = size;
+		pixels = new int[SIZE * SIZE];
+		setColor(color);
+	}
+	
+	private void setColor(int color) {
+		for (int i = 0; i < SIZE * SIZE; i++) {
+			pixels[i] = color;
+		}
+	}
+
 	// loads spites | goes through all pixels in sprite
 	private void load() {
 		for (int y = 0; y < SIZE; y++)

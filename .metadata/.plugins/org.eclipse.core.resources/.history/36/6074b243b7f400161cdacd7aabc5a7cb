@@ -1,7 +1,0 @@
-package com.emicb.desolation.level.tile;
-
-public class Tile {
-	
-	public int x, y;
-	
-}

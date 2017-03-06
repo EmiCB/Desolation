@@ -14,7 +14,6 @@ public class GrassTile extends Tile {
 	}
 
 	public void render(int x, int y, Screen screen) {
-		// Render things here!
+		screen.renderTile(x << 5, y << 5, this);
 	}
-	
 }

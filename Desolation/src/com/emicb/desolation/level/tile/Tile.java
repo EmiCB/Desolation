@@ -6,20 +6,22 @@ import com.emicb.desolation.graphics.Screen;
 import com.emicb.desolation.graphics.Sprite;
 
 
-public class Tile {
+// Abstract = never used, template (kind of)
+public abstract class Tile {
 	
 	public int x, y;
 	public Sprite sprite;
 	
 	// Set tiles
 	public static Tile grass = new GrassTile(Sprite.grass);
+	public static Tile voidTile = new VoidTile(Sprite.voidSprite);
 	
 	// Tile constructor
 	public Tile(Sprite sprite) {
 		this.sprite = sprite;
 	}
 	
-	// Always put this in tile classes
+	// Always put this in tile classes; tiles render themselves
 	public void render(int x, int y, Screen screen) {
 		
 	}

@@ -1,0 +1,5 @@
+package com.emicb.desolation.level.tile;
+
+public class VoidTile extends Tile {
+
+}

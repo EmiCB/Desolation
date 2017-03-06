@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 
 import com.emicb.desolation.graphics.Screen;
 import com.emicb.desolation.input.Keyboard;
+import com.emicb.desolation.level.Level;
+import com.emicb.desolation.level.RandomLevel;
 
 
 public class Game extends Canvas implements Runnable {	
@@ -21,7 +23,7 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// Sets game screen resolution
-	public static int width = 400;
+	public static int width = 600;
 	public static int height = width / 16 * 9; // Sets resolution to a 16 * 9 ratio
 	public static int scale = 3; // How much game will be scaled up to
 	
@@ -31,6 +33,7 @@ public class Game extends Canvas implements Runnable {
 	private Thread thread; // Thread: process within a process
 	private JFrame frame; // something to do with graphics (fix comment later)
 	private Keyboard key; // key inputs
+	private Level level; // level
 	private boolean running = false; // indicates if program is running
 
 	private Screen screen;
@@ -48,6 +51,7 @@ public class Game extends Canvas implements Runnable {
 		screen = new Screen(width, height);
 		frame = new JFrame();
 		key = new Keyboard();
+		level = new RandomLevel(64, 64);
 		
 		addKeyListener(key);
 	}
@@ -90,7 +94,7 @@ public class Game extends Canvas implements Runnable {
 			long now = System.nanoTime(); // time when game runs
 			delta += (now - lastTime) / ns;
 			lastTime = now;
-			
+				
 			// timer for updates (controls update speed for all players)
 			while (delta >= 1) {
 				update(); // handles logic
@@ -139,9 +143,9 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		screen.clear();
-		screen.render(x, y);
+		level.render(x, y, screen);
 		
-		for (int i=0; i<pixels.length; i++) {
+		for (int i = 0; i < pixels.length; i++) {
 			pixels [i] = screen.pixels[i];
 		}
 		
@@ -165,7 +169,7 @@ public class Game extends Canvas implements Runnable {
 		game.frame.setTitle(Game.title); // sets window title
 		game.frame.add(game); // fills window with something
 		game.frame.pack(); // sets size
-		game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //terminate application when closed
+		game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // terminate application when closed
 		game.frame.setLocationRelativeTo(null); // sets window location to center
 		game.frame.setVisible(true); // shows window
 				
