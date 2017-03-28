@@ -45,9 +45,9 @@ public class Level {
 		screen.setOffset(xScroll, yScroll);
 		// corner pins - define which area of the map to render
 		int x0 = xScroll >> 5; // leftmost x
-		int x1 = (xScroll + screen.width) >> 5; // rightmost x
+		int x1 = (xScroll + screen.width + 32) >> 5; // rightmost x
 		int y0 = yScroll >> 5; // leftmost y
-		int y1 = (yScroll + screen.height) >> 5; // rightmost y
+		int y1 = (yScroll + screen.height + 32) >> 5; // rightmost y
 		
 		// render from corner pins
 		for (int y = y0; y < y1; y++) {
@@ -58,7 +58,8 @@ public class Level {
 	}
 	
 	public Tile getTile(int x, int y) {
-		System.out.println(x + " " + y);
+		// System.out.println(x + " " + y);
+		if (x < 0 || y < 0 || x >= width || y >= height) return Tile.voidTile;
 		if (tiles[x + y * width] == 0) return Tile.grass;
 		return Tile.voidTile;	
 	}
