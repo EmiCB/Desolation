@@ -1,0 +1,7 @@
+package com.emicb.desolation.entity.mob;
+
+import com.emicb.desolation.entity.Entity;
+
+public class Mob extends Entity {
+	
+}

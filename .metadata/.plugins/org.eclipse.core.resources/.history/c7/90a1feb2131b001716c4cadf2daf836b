@@ -1,0 +1,11 @@
+package com.emicb.desolation.entity.mob;
+
+import com.emicb.desolation.entity.Entity;
+import com.emicb.desolation.graphics.Sprite;
+
+public abstract class Mob extends Entity {
+	
+	protected Sprite sprite;
+	public int dir = 0;
+	
+}
