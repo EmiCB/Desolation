@@ -12,4 +12,6 @@
 <fullyQualifiedTypeName name="com.emicb.desolation.graphics.Screen"/>
 <fullyQualifiedTypeName name="com.emicb.desolation.entity.Entity"/>
 <fullyQualifiedTypeName name="com.emicb.desolation.graphics.Sprite"/>
+<fullyQualifiedTypeName name="com.emicb.desolation.entity.mob.Player"/>
+<fullyQualifiedTypeName name="com.emicb.desolation.input.Keyboard"/>
 </qualifiedTypeNameHistroy>

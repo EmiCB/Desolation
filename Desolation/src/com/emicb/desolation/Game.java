@@ -11,6 +11,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import com.emicb.desolation.entity.mob.Player;
 import com.emicb.desolation.graphics.Screen;
 import com.emicb.desolation.input.Keyboard;
 import com.emicb.desolation.level.Level;
@@ -34,6 +35,7 @@ public class Game extends Canvas implements Runnable {
 	private JFrame frame; // something to do with graphics (fix comment later)
 	private Keyboard key; // key inputs
 	private Level level; // level
+	private Player player; // player
 	private boolean running = false; // indicates if program is running
 
 	private Screen screen;
@@ -52,6 +54,7 @@ public class Game extends Canvas implements Runnable {
 		frame = new JFrame();
 		key = new Keyboard();
 		level = new RandomLevel(64, 64);
+		player = new Player(key);
 		
 		addKeyListener(key);
 	}
@@ -119,18 +122,10 @@ public class Game extends Canvas implements Runnable {
 		stop();
 	}
 	
-	int x = 0, y = 0;
-	
 	//******************** Game Logic ********************
 	public void update() {
-		// Key Inputs
-		key.update();
-		
-		// movement
-		if (key.up)	y--;
-		if (key.down) y++;
-		if (key.left) x--;
-		if (key.right) x++;
+		key.update(); // key Inputs
+		player.update(); // player
 	}
 	
 	//******************** Game Images ********************
@@ -143,7 +138,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		screen.clear();
-		level.render(x, y, screen);
+		level.render(player.x, player.y, screen);
 		
 		for (int i = 0; i < pixels.length; i++) {
 			pixels [i] = screen.pixels[i];
